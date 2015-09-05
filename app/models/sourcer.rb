@@ -85,6 +85,14 @@ class Sourcer
     #       "username": "smolss",
     #       "avatar_image": "https://media.mongodb.org/lrewwerwer-header.png"
     #     },
+    #     "asked_to": [
+    #       {
+    #         "uid": "55e7668c4102132ea8000065", # 
+    #         "name": "Sophia tokan",
+    #         "username": "stokan",
+    #         "avatar_image": "https://media.mongodb.org/logo-her8oer-header.png"
+    #       }
+    #     ],
     #     "is_answerer": false, # loggedin_user_id is one of the "asked_to"?
     #     "is_asker": false, # loggedin_user_id == asked_by_user ?
     #     "requested_answer": false, # loggedin_user_id is one of the "requestors"?
