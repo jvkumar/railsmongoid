@@ -29,7 +29,7 @@ class Sourcer
     # TODO: Write your code to return data in hash, as sample shown below
 
 
-    [
+    # [
     #   {
     #     "qid": "55ea003e4102135d9d000002",
     #     "has_any_answer": true,
