@@ -8,7 +8,7 @@ class HomesController < ApplicationController
     filters = {
       loggedin_user_id: params[:loggedin_user_id] || nil, 
       type:             :question,
-      asked_to:         params[:username] || nil,
+      asked_to:         params[:user_id] || nil,
       sort_by:          params[:sort_by],
       sort_order:       params[:sort_order],
       asked_by:         params[:asked_by], 
