@@ -23,7 +23,7 @@ class HomesController < ApplicationController
       page_number:      params[:page_number] || 1,
     }
     s = Sourcer.new filters
-    render json: s.getData
+    render json: s.getData, loggedin_user_id: filters[:loggedin_user_id], root: false
   end
 
   private

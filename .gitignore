@@ -57,3 +57,4 @@ bower.json
 *.swm
 *.swn
 /todo
+.idea
