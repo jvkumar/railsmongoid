@@ -6,14 +6,16 @@ class Sourcer
   # :sort_by - can be one of these: time or popularity - if type is "answer" then "popularity" is defined by (sum of like_count+comment_count), but if type is "question", then "popularity" is defined by "requestor_count"
   # :sort_order
   # :asked_by
+  # :asked_to
+  # :answerd_by
+  # :asked_by_user_status
+  # :asked_to_user_status
+  # :answerd_by_user_status
   # :requested_by 
   # :type   --- If type is answer, then return only those questions, which have at least one "active=true" answer doc
   #    --- If type is question, then return all questions, which have no "active=true" answer doc or no answer doc at all
-  # :answerd_by
   # :commented_by
   # :liked_by
-  # :asked_to
-  # :user_status 
   # :question_active 
   # :comment_active 
   # :answer_active 
@@ -107,21 +109,24 @@ class Sourcer
   private
 
   def setDefault
-    @filter[:type]            = sanitize :type
-    @filter[:sort_by]         = sanitize :sort_by
-    @filter[:sort_order]      = sanitize :sort_order
-    @filter[:question_active] = sanitize :question_active
-    @filter[:comment_active]  = sanitize :comment_active
-    @filter[:answer_active]   = sanitize :answer_active
-    @filter[:user_status]     = sanitize :user_status
+    @filter[:type]                    = sanitize :type
+    @filter[:sort_by]                 = sanitize :sort_by
+    @filter[:sort_order]              = sanitize :sort_order
+    @filter[:question_active]         = sanitize :question_active
+    @filter[:comment_active]          = sanitize :comment_active
+    @filter[:answer_active]           = sanitize :answer_active
+    @filter[:asked_by_user_status]    = sanitize :asked_by_user_status
+    @filter[:asked_to_user_status]    = sanitize :asked_to_user_status
+    @filter[:answerd_by_user_status]  = sanitize :answerd_by_user_status
 
-    @filter[:page_number]     = @filter[:page_number].present?      ? @filter[:page_number].to_i : 1
-    @filter[:page_offset]     = @filter[:page_offset].present?      ? @filter[:page_offset].to_i : 10
-    @filter[:asked_to]        = @filter[:asked_to].present?         ? @filter[:asked_to] : nil
-    @filter[:asked_by]        = @filter[:asked_by].present?         ? @filter[:asked_by] : nil
-    @filter[:requested_by]    = @filter[:requested_by].present?     ? @filter[:requested_by] : nil
-    @filter[:commented_by]    = @filter[:commented_by].present?     ? @filter[:commented_by] : nil
-    @filter[:liked_by]        = @filter[:liked_by].present?         ? @filter[:liked_by] : nil
+    @filter[:page_number]             = @filter[:page_number].present?      ? @filter[:page_number].to_i : 1
+    @filter[:page_offset]             = @filter[:page_offset].present?      ? @filter[:page_offset].to_i : 10
+    @filter[:asked_to]                = @filter[:asked_to].present?         ? @filter[:asked_to] : nil
+    @filter[:asked_by]                = @filter[:asked_by].present?         ? @filter[:asked_by] : nil
+    @filter[:answerd_by]              = @filter[:answerd_by].present?       ? @filter[:answerd_by] : nil
+    @filter[:requested_by]            = @filter[:requested_by].present?     ? @filter[:requested_by] : nil
+    @filter[:commented_by]            = @filter[:commented_by].present?     ? @filter[:commented_by] : nil
+    @filter[:liked_by]                = @filter[:liked_by].present?         ? @filter[:liked_by] : nil
 
     @filter[:loggedin_user_id] = @filter[:loggedin_user_id]
   end
@@ -134,7 +139,7 @@ class Sourcer
       [:time, :popularity].include? @filter[key] ? @filter[key] : :time
     when :sort_order
       [:asc, :desc].include? @filter[key] ? @filter[key] : :desc
-    when :user_status
+    when :asked_by_user_status, :asked_to_user_status, :answerd_by_user_status
       [:active, :inactive].include? @filter[key] ? @filter[key] : :active
     when :question_active, :comment_active, :answer_active
       [true, false].include? @filter[key] ? @filter[key] : true
