@@ -60,7 +60,7 @@ class Sourcer
     #         }
     #       },
     #       {
-    #         "uid": "kg3435323fuwe7ir345yukwhjerl", # 
+    #         "uid": "kg3435323fuwe7ir345yukwhjerl",  
     #         "name": "Laura Nanop",
     #         "username": "lnop",
     #         "avatar_image": "https://media.mongodb.org/ldfsdfr.png",
@@ -87,7 +87,7 @@ class Sourcer
     #     },
     #     "asked_to": [
     #       {
-    #         "uid": "55e7668c4102132ea8000065", # 
+    #         "uid": "55e7668c4102132ea8000065",  
     #         "name": "Sophia tokan",
     #         "username": "stokan",
     #         "avatar_image": "https://media.mongodb.org/logo-her8oer-header.png"
