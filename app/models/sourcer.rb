@@ -21,6 +21,7 @@ class Sourcer
   # :answer_active 
   # :page_number
   # :page_offset
+  # :loggedin_user_id
   
   def initialize (f = {})
     @filter = f
