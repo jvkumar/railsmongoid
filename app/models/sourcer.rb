@@ -17,7 +17,7 @@ class Sourcer
   # :question_active 
   # :comment_active 
   # :answer_active 
-  # :page_start_from
+  # :page_number
   # :page_offset
   
   def initialize (f = {})
@@ -139,7 +139,7 @@ class Sourcer
     @filter[:answer_active]   = sanitize :answer_active
     @filter[:user_status]     = sanitize :user_status
 
-    @filter[:page_start_from] = @filter[:page_start_from].present?  ? @filter[:page_start_from].to_i : 1
+    @filter[:page_number]     = @filter[:page_number].present?      ? @filter[:page_number].to_i : 1
     @filter[:page_offset]     = @filter[:page_offset].present?      ? @filter[:page_offset].to_i : 10
     @filter[:asked_to]        = @filter[:asked_to].present?         ? @filter[:asked_to] : nil
     @filter[:asked_by]        = @filter[:asked_by].present?         ? @filter[:asked_by] : nil
