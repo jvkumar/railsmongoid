@@ -3,7 +3,7 @@ class Sourcer
 
   attr_accessor :filter 
 
-  # :sort_by - can be one of these: time or popularity - if type is "answer" then "popularity" is defined by popularity_point in answer model, but if type is "question", then "popularity" is defined by "requestor_count" in question model
+  # :sort_by - can be one of these: time or popularity - if type is "answer" then "popularity" is defined by popularity_point in question model, but if type is "question", then "popularity" is defined by "requestor_count" in question model
   # :sort_order
   # :asked_by
   # :asked_to

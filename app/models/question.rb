@@ -7,6 +7,7 @@ class Question
   field :requestor_count,  type: Integer # How many people have requested answer of this question, apart from asker
   field :requestors,  type: Array, default: [] # Ids of users who also want answer of this question, apart from asker
   field :active, default: true
+  field :popularity_point, type: Integer # this is actually sum of max(comment_count+like_count) of answers of this question
 
   belongs_to :user, foreign_key: :asked_by_user 
 
@@ -29,6 +30,7 @@ end
 #     "55e7668c4102132ea8000067" ],
 #   "requestor_count" : 2,
 #   "requestors" : ["55e7668c4102132ea800wewr", "khfguw7iyruehfgweiry7263"],
+#   "popularity_point": 2,
 #   "active" : true,
 #   "asked_by_user" : ObjectId( "55e766b14102132ea8000097" ),
 #   "text" : "What is your name?",
@@ -39,7 +41,6 @@ end
 #       "text" : "My name is John",
 #       "like_count" : 1,
 #       "comment_count" : 0,
-#       "popularity_point": 1,
 #       "liked_by" : ["duhfi87238993jhfukhdhfu"],
 #       "active" : true,
 #       "user_id" : "55e7668c4102132ea8000065",
@@ -50,7 +51,6 @@ end
 #       "text" : "My name is Lisa",
 #       "like_count" : 0,
 #       "comment_count" : 2,
-#       "popularity_point": 2,
 #       "liked_by" : [],
 #       "active" : false,
 #       "user_id" : "55e7668c4102132ea8000066",
