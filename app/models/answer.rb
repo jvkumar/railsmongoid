@@ -8,6 +8,7 @@ class Answer
   field :comment_count,  type: Integer
   field :active, default: true
   field :user_id, type: String
+  field :popularity_point, type: Integer # this is actually sum of comment_count+like_count
   
   validates_presence_of :user_id
 
