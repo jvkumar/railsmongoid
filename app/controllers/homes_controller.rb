@@ -16,6 +16,7 @@ class HomesController < ApplicationController
       commented_by:     params[:commented_by], 
       liked_by:         params[:liked_by],
       page_number:      params[:page_number] || 1,
+      page_offset:      params[:page_offset] || 10,
       user_status:      params[:user_status] || 'active',
       question_active:  to_bool(params[:question_active]) || true,
       answer_active:    to_bool(params[:answer_active]) || true,
