@@ -3,7 +3,7 @@ class Sourcer
 
   attr_accessor :filter 
 
-  # :sort_by
+  # :sort_by - can be one of these: time or popularity - if type is "answer" then "popularity" is defined by (sum of like_count+comment_count), but if type is "question", then "popularity" is defined by "requestor_count"
   # :sort_order
   # :asked_by
   # :requested_by 
@@ -84,7 +84,7 @@ class Sourcer
     #         }
     #       },
     #       {
-    #         "uid": "kg3435323fuwe7ir345yukwhjerl", # 
+    #         "uid": "kg3435323fuwe7ir345yukwhjerl",  
     #         "name": "Laura Nanop",
     #         "username": "lnop",
     #         "avatar_image": "https://media.mongodb.org/ldfsdfr.png",
@@ -111,7 +111,7 @@ class Sourcer
     #     },
     #     "asked_to": [
     #       {
-    #         "uid": "55e7668c4102132ea8000065", # 
+    #         "uid": "55e7668c4102132ea8000065",  
     #         "name": "Sophia tokan",
     #         "username": "stokan",
     #         "avatar_image": "https://media.mongodb.org/logo-her8oer-header.png"
