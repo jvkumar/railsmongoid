@@ -19,8 +19,7 @@ class HomesController < ApplicationController
       user_status:      params[:user_status] || 'active',
       question_active:  to_bool(params[:question_active]) || true,
       answer_active:    to_bool(params[:answer_active]) || true,
-      comment_active:   to_bool(params[:comment_active]) || true,
-      page_number:      params[:page_number] || 1,
+      comment_active:   to_bool(params[:comment_active]) || true
     }
     s = Sourcer.new filters
     render json: s.getData
