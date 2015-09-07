@@ -20,9 +20,9 @@ class HomesController < ApplicationController
       # asked_by_user_status:     params[:asked_by_user_status] || 'active',
       # asked_to_user_status:     params[:asked_to_user_status] || 'active',
       # answerd_by_user_status:   params[:answerd_by_user_status] || 'active',
-      question_status:          params[:question_active] || 'active',
-      answer_status:            params[:answer_active] || 'active',
-      comment_status:           params[:comment_active] || 'active',
+      question_status:          params[:question_status] || 'active',
+      answer_status:            params[:answer_status] || 'active',
+      comment_status:           params[:comment_status] || 'active',
     }
     
     s = Sourcer.new filters
