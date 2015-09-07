@@ -1,8 +1,6 @@
 class QuestionSerializer < ActiveModel::Serializer
   attributes :qid, :has_any_answer, :text, :asked_by_user, :is_answerer, :is_asker, :requested_answer, :requestor_count, :asked_to
 
-  has_many :asked_to, each_serializer: UserSerializer
-
   def qid
     object._id.to_s
   end
@@ -12,11 +10,11 @@ class QuestionSerializer < ActiveModel::Serializer
   end
 
   def asked_by_user
-    UserSimpleSerializer.new(object.user).attributes
+    UserSimpleSerializer.new(object.user).attributes if object.user
   end
 
   def is_answerer
-    object.asked_to.include?(serialization_options[:loggedin_user_id])
+    (object.asked_to || []).include?(serialization_options[:loggedin_user_id])
   end
 
   def is_asker
@@ -24,10 +22,15 @@ class QuestionSerializer < ActiveModel::Serializer
   end
 
   def requested_answer
-    object.requestors.include?(serialization_options[:loggedin_user_id])
+    (object.requestors || []).include?(serialization_options[:loggedin_user_id])
   end
 
   def asked_to
-    User.where(id: {'$in': (object.asked_to || [])})
+    User.where(id: {'$in': (object.asked_to || [])}).map do |user|
+      user_serializer = UserSerializer.new(user)
+      user_serializer.serialization_options = serialization_options
+      user_serializer.serialization_options[:question] = object
+      user_serializer.attributes
+    end
   end
 end

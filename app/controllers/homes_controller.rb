@@ -26,7 +26,7 @@ class HomesController < ApplicationController
     }
     
     s = Sourcer.new filters
-    render json: s.getData, loggedin_user_id: filters[:loggedin_user_id], root: false
+    render json: s.getData, root: false
   end
 
   private

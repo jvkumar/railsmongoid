@@ -33,7 +33,7 @@ class Sourcer
     if @filter[:type] == :answer
       questions = Question.where('answers.active': true)
     elsif @filter[:type] == :question
-      questions = Question.where('answers.active': true)
+      questions = Question.where('answers.active': false)
     else
       questions = Question.all
     end
@@ -46,15 +46,36 @@ class Sourcer
     questions = questions.where(asked_by_user: @filter[:asked_by]) if @filter[:asked_by].present?
     questions = questions.where(requestors: @filter[:requested_by]) if @filter[:requested_by].present?
 
+    questions = questions.where('answers.user_id': @filter[:answerd_by]) if @filter[:answerd_by].present?
     questions = questions.where('answers.comments.user_id': @filter[:commented_by]) if @filter[:commented_by].present?
     questions = questions.where('answers.liked_by': @filter[:liked_by]) if @filter[:liked_by].present?
 
+    users = {}
+    users[:active] = User.where(status: :active).pluck(:_id).map{|v| v.to_s}
+    users[:inactive] = User.where(status: :inactive).pluck(:_id).map{|v| v.to_s}
+
+    questions = questions.where('asked_by_user' => {'$in' => users[@filter[:asked_by_user_status]]})
+    questions = questions.where('answers.user_id' => {'$in' => users[@filter[:answerd_by_user_status]]})
+    questions = questions.where('asked_to' => {'$in' => users[@filter[:asked_to_user_status]]})
+
     if @filter[:sort_by] == :time
       questions = questions.order_by(created_at: @filter[:sort_order])
+    elsif @filter[:sort_by] == :popularity
+      if @filter[:type] == :answer
+        questions = questions.order_by(popularity_point: @filter[:sort_order])
+      elsif @filter[:type] == :question
+        questions = questions.order_by(requestor_count: @filter[:sort_order])
+      end
     end
 
-    questions
+    questions = questions.page(@filter[:page_number]).per(@filter[:page_offset])
 
+    questions.map do |question|
+      question_serializer = QuestionSerializer.new(question)
+      question_serializer.serialization_options = {}
+      question_serializer.serialization_options[:loggedin_user_id] = @filter[:loggedin_user_id]
+      question_serializer.attributes
+    end
 
     # [
     #   {
@@ -159,15 +180,15 @@ class Sourcer
   def sanitize key
     case key
     when :type
-      [:answer, :question].include? @filter[key] ? @filter[key] : :answer
+      ([:answer, :question].include? @filter[key]) ? @filter[key] : :answer
     when :sort_by
-      [:time, :popularity].include? @filter[key] ? @filter[key] : :time
+      ([:time, :popularity].include? @filter[key]) ? @filter[key] : :time
     when :sort_order
-      [:asc, :desc].include? @filter[key] ? @filter[key] : :desc
+      ([:asc, :desc].include? @filter[key]) ? @filter[key] : :desc
     when :asked_by_user_status, :asked_to_user_status, :answerd_by_user_status
-      [:active, :inactive].include? @filter[key] ? @filter[key] : :active
+      ([:active, :inactive].include? @filter[key]) ? @filter[key] : :active
     when :question_active, :comment_active, :answer_active
-      [true, false].include? @filter[key] ? @filter[key] : true
+      ([true, false].include? @filter[key]) ? @filter[key] : true
     end
   end
 
