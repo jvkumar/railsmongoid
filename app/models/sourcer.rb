@@ -28,16 +28,16 @@ class Sourcer
   def getData
     # TODO: Write your code to return data in hash, as sample shown below
     if @filter[:type] == :answer
-      questions = Question.where('answers.active': true)
+      questions = Question.where('answers.status': :active)
     elsif @filter[:type] == :question
-      questions = Question.where('answers.active': false)
+      questions = Question.where('answers.status': :inactive)
     else
       questions = Question.all
     end
 
-    questions = questions.where(active: @filter[:question_active])
-    questions = questions.where('answers.comments.active': @filter[:comment_active])
-    questions = questions.where('answers.active': @filter[:answer_active])
+    questions = questions.where(status: @filter[:question_status])
+    questions = questions.where('answers.comments.status': @filter[:comment_status])
+    questions = questions.where('answers.status': @filter[:answer_status])
 
     questions = questions.where(asked_to: @filter[:asked_to]) if @filter[:asked_to].present?
     questions = questions.where(asked_by_user: @filter[:asked_by]) if @filter[:asked_by].present?
@@ -46,14 +46,6 @@ class Sourcer
     questions = questions.where('answers.user_id': @filter[:answerd_by]) if @filter[:answerd_by].present?
     questions = questions.where('answers.comments.user_id': @filter[:commented_by]) if @filter[:commented_by].present?
     questions = questions.where('answers.liked_by': @filter[:liked_by]) if @filter[:liked_by].present?
-
-    users = {}
-    users[:active] = User.where(status: :active).pluck(:_id).map{|v| v.to_s}
-    users[:inactive] = User.where(status: :inactive).pluck(:_id).map{|v| v.to_s}
-
-    questions = questions.where('asked_by_user' => {'$in' => users[@filter[:asked_by_user_status]]})
-    questions = questions.where('answers.user_id' => {'$in' => users[@filter[:answerd_by_user_status]]})
-    questions = questions.where('asked_to' => {'$in' => users[@filter[:asked_to_user_status]]})
 
     if @filter[:sort_by] == :time
       questions = questions.order_by(created_at: @filter[:sort_order])
