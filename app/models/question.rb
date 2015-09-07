@@ -6,7 +6,7 @@ class Question
   field :asked_to,  type: Array, default: [] # Id of the asker who asked this question
   field :requestor_count,  type: Integer # How many people have requested answer of this question, apart from asker
   field :requestors,  type: Array, default: [] # Ids of users who also want answer of this question, apart from asker
-  field :active, default: true
+  field :status, type: String, default: "active"
   field :popularity_point, type: Integer # this is actually sum of max(comment_count+like_count) of answers of this question
 
   belongs_to :user, foreign_key: :asked_by_user 
@@ -31,7 +31,7 @@ end
 #   "requestor_count" : 2,
 #   "requestors" : ["55e7668c4102132ea800wewr", "khfguw7iyruehfgweiry7263"],
 #   "popularity_point": 2,
-#   "active" : true,
+#   "status" : "active",
 #   "asked_by_user" : ObjectId( "55e766b14102132ea8000097" ),
 #   "text" : "What is your name?",
 #   "updated_at" : Date( 1441398846696 ),
@@ -42,7 +42,7 @@ end
 #       "like_count" : 1,
 #       "comment_count" : 0,
 #       "liked_by" : ["duhfi87238993jhfukhdhfu"],
-#       "active" : true,
+#       "status" : "active",
 #       "user_id" : "55e7668c4102132ea8000065",
 #       "updated_at" : Date( 1441400501867 ),
 #       "created_at" : Date( 1441400501867 )
@@ -52,21 +52,21 @@ end
 #       "like_count" : 0,
 #       "comment_count" : 2,
 #       "liked_by" : [],
-#       "active" : false,
+#       "status" : "active",
 #       "user_id" : "55e7668c4102132ea8000066",
 #       "updated_at" : Date( 1441400501867 ),
 #       "created_at" : Date( 1441400501867 ),
 #       "comments" : [ 
 #         { "_id" : ObjectId( "7y87773789587uy783345" ),
 #           "text" : "I like your name",
-#           "active" : true,
+#           "status" : "active",
 #           "user_id" : "877478hj9828h87286987",
 #           "updated_at" : Date( 1441400501867 ),
 #           "created_at" : Date( 1441400501867 )
 #         },
 #         { "_id" : ObjectId( "65879829029745y78yiu8" ),
 #           "text" : "Your name is so cool",
-#           "active" : true,
+#           "status" : "active",
 #           "user_id" : "f8734yiw673y49389wr27987",
 #           "updated_at" : Date( 1441400501867 ),
 #           "created_at" : Date( 1441400501867 )
@@ -85,7 +85,7 @@ end
 #   "name": "Tomy hilson",
 #   "username" : "coolkat",
 #   "avatar_image": "http://xyz.com/myimage.jpg",
-#   "active" : true,
+#   "status" : true,
 #   "updated_at" : Date( 1441400501867 ),
 #   "created_at" : Date( 1441400501867 )
 # }

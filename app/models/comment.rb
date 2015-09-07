@@ -3,7 +3,7 @@ class Comment
   include Mongoid::Timestamps
 
   field :text,  type: String
-  field :active, default: true
+  field :status, type: String, default: "active"
   field :user_id, type: String
   
   validates_presence_of :user_id

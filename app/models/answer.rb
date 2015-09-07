@@ -6,7 +6,7 @@ class Answer
   field :like_count,  type: Integer
   field :liked_by,  type: Array, default: []
   field :comment_count,  type: Integer
-  field :active, default: true
+  field :status, type: String, default: "active"
   field :user_id, type: String
   
   validates_presence_of :user_id

@@ -17,12 +17,12 @@ class HomesController < ApplicationController
       liked_by:                 params[:liked_by],
       page_number:              params[:page_number] || 1,
       page_offset:              params[:page_offset] || 10,
-      asked_by_user_status:     params[:asked_by_user_status] || 'active',
-      asked_to_user_status:     params[:asked_to_user_status] || 'active',
-      answerd_by_user_status:   params[:answerd_by_user_status] || 'active',
-      question_active:          to_bool(params[:question_active]) || true,
-      answer_active:            to_bool(params[:answer_active]) || true,
-      comment_active:           to_bool(params[:comment_active]) || true
+      # asked_by_user_status:     params[:asked_by_user_status] || 'active',
+      # asked_to_user_status:     params[:asked_to_user_status] || 'active',
+      # answerd_by_user_status:   params[:answerd_by_user_status] || 'active',
+      question_status:          params[:question_active] || 'active',
+      answer_status:            params[:answer_active] || 'active',
+      comment_status:           params[:comment_active] || 'active',
     }
     
     s = Sourcer.new filters
@@ -30,9 +30,5 @@ class HomesController < ApplicationController
   end
 
   private
-  def to_bool str
-    return false unless str
-    str == 'true'
-  end
 
 end
