@@ -30,7 +30,7 @@ class Sourcer
     if @filter[:type] == :answer
       questions = Question.where('answers.status': :active)
     elsif @filter[:type] == :question
-      questions = Question.where('answers.status' => {'$ne' => :active})
+      questions = Question.or( {'answers.status' => { '$ne' => :active } }, { 'answers' => { '$exists' => false } })
     else
       questions = Question.all
     end
