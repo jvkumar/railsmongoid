@@ -38,7 +38,7 @@ class Sourcer
     questions = questions.where(asked_to: @filter[:asked_to])        if @filter[:asked_to].present?
     questions = questions.where(asked_by_user: @filter[:asked_by])   if @filter[:asked_by].present?
     questions = questions.where(requestors: @filter[:requested_by])  if @filter[:requested_by].present?
-    binding.pry
+
     if @filter[:type] == :answer
       questions = questions.where('answers.status': @filter[:answer_status])
       questions = questions.where('answers.user_id': @filter[:answerd_by])    if @filter[:answerd_by].present?
