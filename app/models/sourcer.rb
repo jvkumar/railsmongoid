@@ -37,7 +37,7 @@ class Sourcer
 
     questions = questions.where(status: @filter[:question_status])
     questions = questions.where('answers.comments.status': @filter[:comment_status])
-    questions = questions.where('answers.status': @filter[:answer_status])
+    questions = questions.where('answers.status': @filter[:answer_status]) if @filter[:type] == :answer
 
     questions = questions.where(asked_to: @filter[:asked_to]) if @filter[:asked_to].present?
     questions = questions.where(asked_by_user: @filter[:asked_by]) if @filter[:asked_by].present?
