@@ -26,26 +26,27 @@ class Sourcer
   end
 
   def getData
-    # TODO: Write your code to return data in hash, as sample shown below
     if @filter[:type] == :answer
-      questions = Question.where('answers.status': :active)
+      questions = Question.and( { 'answers' => { '$exists' => true } }, {'answers.status' => :active} )
     elsif @filter[:type] == :question
       questions = Question.or( {'answers.status' => { '$ne' => :active } }, { 'answers' => { '$exists' => false } })
     else
       questions = Question.all
     end
 
-    questions = questions.where(status: @filter[:question_status])
-    questions = questions.where('answers.comments.status': @filter[:comment_status])
-    questions = questions.where('answers.status': @filter[:answer_status]) if @filter[:type] == :answer
+    questions = questions.where(status: @filter[:question_status])              
+    questions = questions.where(asked_to: @filter[:asked_to])        if @filter[:asked_to].present?
+    questions = questions.where(asked_by_user: @filter[:asked_by])   if @filter[:asked_by].present?
+    questions = questions.where(requestors: @filter[:requested_by])  if @filter[:requested_by].present?
+    binding.pry
+    if @filter[:type] == :answer
+      questions = questions.where('answers.status': @filter[:answer_status])
+      questions = questions.where('answers.user_id': @filter[:answerd_by])    if @filter[:answerd_by].present?
+      questions = questions.where('answers.liked_by': @filter[:liked_by])     if @filter[:liked_by].present?
 
-    questions = questions.where(asked_to: @filter[:asked_to]) if @filter[:asked_to].present?
-    questions = questions.where(asked_by_user: @filter[:asked_by]) if @filter[:asked_by].present?
-    questions = questions.where(requestors: @filter[:requested_by]) if @filter[:requested_by].present?
-
-    questions = questions.where('answers.user_id': @filter[:answerd_by]) if @filter[:answerd_by].present?
-    questions = questions.where('answers.comments.user_id': @filter[:commented_by]) if @filter[:commented_by].present?
-    questions = questions.where('answers.liked_by': @filter[:liked_by]) if @filter[:liked_by].present?
+      questions = questions.and( { 'answers.comments.user_id': @filter[:commented_by] }, { 'answers.comments' => { '$exists' => true } } )  if @filter[:commented_by].present?
+      questions = questions.and( { 'answers.comments.status': @filter[:comment_status] }, { 'answers.comments' => { '$exists' => true } } )
+    end
 
     if @filter[:sort_by] == :time
       questions = questions.order_by(created_at: @filter[:sort_order])
