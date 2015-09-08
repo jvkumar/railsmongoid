@@ -8,17 +8,14 @@ class Sourcer
   # :asked_by
   # :asked_to
   # :answerd_by
-  # :asked_by_user_status
-  # :asked_to_user_status
-  # :answerd_by_user_status
   # :requested_by 
-  # :type   --- If type is answer, then return only those questions, which have at least one "active=true" answer doc
-  #    --- If type is question, then return all questions, which have no "active=true" answer doc or no answer doc at all
+  # :type   --- If type is answer, then return only those questions, which have at least one "status=active" answer doc
+  #    --- If type is question, then return all questions, which have no "status=active" answer doc or no answer doc at all
   # :commented_by
   # :liked_by
-  # :question_active 
-  # :comment_active 
-  # :answer_active 
+  # :question_status 
+  # :comment_status 
+  # :answer_status 
   # :page_number
   # :page_offset
   # :loggedin_user_id
@@ -31,16 +28,16 @@ class Sourcer
   def getData
     # TODO: Write your code to return data in hash, as sample shown below
     if @filter[:type] == :answer
-      questions = Question.where('answers.active': true)
+      questions = Question.where('answers.status': :active)
     elsif @filter[:type] == :question
-      questions = Question.where('answers.active': false)
+      questions = Question.where('answers.status' => {'$ne' => :active})
     else
       questions = Question.all
     end
 
-    questions = questions.where(active: @filter[:question_active])
-    questions = questions.where('answers.comments.active': @filter[:comment_active])
-    questions = questions.where('answers.active': @filter[:answer_active])
+    questions = questions.where(status: @filter[:question_status])
+    questions = questions.where('answers.comments.status': @filter[:comment_status])
+    questions = questions.where('answers.status': @filter[:answer_status])
 
     questions = questions.where(asked_to: @filter[:asked_to]) if @filter[:asked_to].present?
     questions = questions.where(asked_by_user: @filter[:asked_by]) if @filter[:asked_by].present?
@@ -49,14 +46,6 @@ class Sourcer
     questions = questions.where('answers.user_id': @filter[:answerd_by]) if @filter[:answerd_by].present?
     questions = questions.where('answers.comments.user_id': @filter[:commented_by]) if @filter[:commented_by].present?
     questions = questions.where('answers.liked_by': @filter[:liked_by]) if @filter[:liked_by].present?
-
-    users = {}
-    users[:active] = User.where(status: :active).pluck(:_id).map{|v| v.to_s}
-    users[:inactive] = User.where(status: :inactive).pluck(:_id).map{|v| v.to_s}
-
-    questions = questions.where('asked_by_user' => {'$in' => users[@filter[:asked_by_user_status]]})
-    questions = questions.where('answers.user_id' => {'$in' => users[@filter[:answerd_by_user_status]]})
-    questions = questions.where('asked_to' => {'$in' => users[@filter[:asked_to_user_status]]})
 
     if @filter[:sort_by] == :time
       questions = questions.order_by(created_at: @filter[:sort_order])
@@ -158,12 +147,12 @@ class Sourcer
     @filter[:type]                    = sanitize :type
     @filter[:sort_by]                 = sanitize :sort_by
     @filter[:sort_order]              = sanitize :sort_order
-    @filter[:question_active]         = sanitize :question_active
-    @filter[:comment_active]          = sanitize :comment_active
-    @filter[:answer_active]           = sanitize :answer_active
-    @filter[:asked_by_user_status]    = sanitize :asked_by_user_status
-    @filter[:asked_to_user_status]    = sanitize :asked_to_user_status
-    @filter[:answerd_by_user_status]  = sanitize :answerd_by_user_status
+    @filter[:question_status]         = sanitize :question_status
+    @filter[:comment_status]          = sanitize :comment_status
+    @filter[:answer_status]           = sanitize :answer_status
+    # @filter[:asked_by_user_status]    = sanitize :asked_by_user_status
+    # @filter[:asked_to_user_status]    = sanitize :asked_to_user_status
+    # @filter[:answerd_by_user_status]  = sanitize :answerd_by_user_status
 
     @filter[:page_number]             = @filter[:page_number].present?      ? @filter[:page_number].to_i : 1
     @filter[:page_offset]             = @filter[:page_offset].present?      ? @filter[:page_offset].to_i : 10
@@ -185,10 +174,10 @@ class Sourcer
       ([:time, :popularity].include? @filter[key]) ? @filter[key] : :time
     when :sort_order
       ([:asc, :desc].include? @filter[key]) ? @filter[key] : :desc
-    when :asked_by_user_status, :asked_to_user_status, :answerd_by_user_status
-      ([:active, :inactive].include? @filter[key]) ? @filter[key] : :active
-    when :question_active, :comment_active, :answer_active
-      ([true, false].include? @filter[key]) ? @filter[key] : true
+    # when :asked_by_user_status, :asked_to_user_status, :answerd_by_user_status
+    #   ([:active, :inactive].include? @filter[key]) ? @filter[key] : :active
+    when :question_status, :comment_status, :answer_status
+      (["active", "inactive", "deleted"].include? @filter[key]) ? @filter[key] : "active"
     end
   end
 
