@@ -58,12 +58,18 @@ class Sourcer
       end
     end
 
-    questions = questions.page(@filter[:page_number]).per(@filter[:page_offset])
+    #questions = Question.all
+    #questions = questions.page(@filter[:page_number]).per(@filter[:page_offset])
+    questions = questions.paginate(page: @filter[:page_number], per_page: @filter[:page_offset])
+
+    user_ids = questions.map{ |v| v.asked_to.map{ |id| id.to_s } << v.asked_by_user.to_s }.flatten
+    users = User.where(_id: {'$in' => user_ids}).map{ |v| v }
 
     questions.map do |question|
       question_serializer = QuestionSerializer.new(question)
       question_serializer.serialization_options = {}
       question_serializer.serialization_options[:loggedin_user_id] = @filter[:loggedin_user_id]
+      question_serializer.serialization_options[:users] = users
       question_serializer.attributes
     end
 

@@ -10,7 +10,8 @@ class QuestionSerializer < ActiveModel::Serializer
   end
 
   def asked_by_user
-    UserSimpleSerializer.new(object.user).attributes if object.user
+    user = serialization_options[:users].select{ |v| v._id.to_s == object.asked_by_user.to_s }.first
+    UserSimpleSerializer.new(user).attributes if user
   end
 
   def is_answerer
@@ -26,7 +27,7 @@ class QuestionSerializer < ActiveModel::Serializer
   end
 
   def asked_to
-    User.where(id: {'$in': (object.asked_to || [])}).map do |user|
+    serialization_options[:users].select{ |v| (object.asked_to || []).include?(v._id.to_s) }.map do |user|
       user_serializer = UserSerializer.new(user)
       user_serializer.serialization_options = serialization_options
       user_serializer.serialization_options[:question] = object
