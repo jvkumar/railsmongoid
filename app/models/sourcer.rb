@@ -58,8 +58,9 @@ class Sourcer
       end
     end
 
-    questions = questions.page(@filter[:page_number]).per(@filter[:page_offset])
-
+    #questions = questions.page(@filter[:page_number]).per(@filter[:page_offset])
+    questions = questions.paginate(page: @filter[:page_number], per_page: @filter[:page_offset])
+    
     questions.map do |question|
       question_serializer = QuestionSerializer.new(question)
       question_serializer.serialization_options = {}

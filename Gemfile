@@ -40,4 +40,4 @@ group :development, :test do
 end
 
 gem 'active_model_serializers'
-gem 'will_paginate'
+gem 'will_paginate_mongoid'
