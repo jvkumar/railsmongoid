@@ -62,7 +62,7 @@ class Sourcer
     #questions = questions.page(@filter[:page_number]).per(@filter[:page_offset])
     questions = questions.paginate(page: @filter[:page_number], per_page: @filter[:page_offset])
 
-    user_ids = questions.map{ |v| v.asked_to.map{ |id| id.to_s } << v.asked_by_user.to_s }.flatten
+    user_ids = questions.map{ |v| v.asked_to.map{ |id| id.to_s } << v.asked_by_user.to_s }.flatten.uniq
     users = User.where(_id: {'$in' => user_ids}).map{ |v| v }
 
     questions.map do |question|
